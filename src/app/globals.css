@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f0e6;
+  --foreground: #23302b;
+  --surface: #fffaf2;
+  --surface-deep: #faefd9;
+  --line: #dbcdb8;
+  --accent: #b86642;
+  --accent-strong: #8f4325;
+  --accent-soft: #f0d8bf;
+  --sage: #4f6b59;
+  --sky: #7eaac3;
+  --shadow: rgba(58, 40, 20, 0.08);
+  --background-wash-top: rgba(247, 240, 230, 0.48);
+  --background-wash-bottom: rgba(247, 240, 230, 0.64);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-deep: var(--surface-deep);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-sage: var(--sage);
+  --color-sky: var(--sky);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-fraunces);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), sans-serif;
+  background-image:
+    linear-gradient(
+      to bottom,
+      var(--background-wash-top),
+      var(--background-wash-bottom)
+    ),
+    url("/background.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+a {
+  color: inherit;
+}
+
+.fc-container {
+  width: min(1100px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.fc-card {
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 92%, white);
+  border-radius: 1rem;
+  box-shadow: 0 16px 38px var(--shadow);
+}
+
+.fc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--line) 70%, white);
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--foreground) 86%, black);
+  background: color-mix(in srgb, var(--surface) 78%, white);
+}
+
+.fc-text-muted {
+  color: color-mix(in srgb, var(--foreground) 66%, white);
+}
+
+.fc-reveal {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
