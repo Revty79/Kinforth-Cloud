@@ -16,7 +16,7 @@ export function SiteLogo({ className, href = "/", subtitle = false }: Props) {
       </span>
       <span className="leading-none">
         <span className="block font-display text-xl tracking-tight text-foreground">
-          Family Cloud
+          Kinforth Cloud
         </span>
         {subtitle ? (
           <span className="mt-1 block text-xs font-medium uppercase tracking-[0.14em] fc-text-muted">
@@ -37,3 +37,4 @@ export function SiteLogo({ className, href = "/", subtitle = false }: Props) {
     </Link>
   );
 }
+

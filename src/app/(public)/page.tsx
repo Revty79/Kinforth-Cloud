@@ -27,7 +27,7 @@ export default function LandingPage() {
       <section className="fc-container py-16 md:py-24">
         <div className="fc-card mx-auto max-w-3xl p-8 text-center sm:p-10">
           <h1 className="font-display text-4xl tracking-tight text-[#1f2f29] sm:text-5xl">
-            Family Cloud
+            Kinforth Cloud
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base leading-7 fc-text-muted sm:text-lg">
             Private home cloud for your family.
@@ -59,3 +59,4 @@ export default function LandingPage() {
     </main>
   );
 }
+

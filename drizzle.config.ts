@@ -8,9 +8,10 @@ export default defineConfig({
   dbCredentials: {
     url:
       process.env.DATABASE_URL ??
-      "postgresql://familycloud_app:Darkness1@10.0.0.218:5432/familycloud",
+      "postgresql://kinforthcloud_app:Darkness1@10.0.0.218:5432/kinforthcloud",
   },
 
   strict: true,
   verbose: true,
 });
+

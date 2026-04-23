@@ -1,7 +1,7 @@
 import path from "node:path";
 
 function getFamilyCloudStorageRootDirectory() {
-  const configuredRoot = process.env.FAMILY_CLOUD_STORAGE_DIR?.trim();
+  const configuredRoot = process.env.KINFORTH_CLOUD_STORAGE_DIR?.trim();
   if (!configuredRoot) {
     return path.join(
       /* turbopackIgnore: true */ process.cwd(),
@@ -55,3 +55,4 @@ export function resolveFamilyFilePath(storedName: string) {
 
   return resolvedPath;
 }
+

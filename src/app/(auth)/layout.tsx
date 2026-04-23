@@ -15,7 +15,7 @@ export default async function AuthLayout({
           <SiteLogo href="/" subtitle />
           <div className="max-w-sm">
             <p className="font-display text-4xl leading-tight text-[#22342d]">
-              Sign in to Family Cloud
+              Sign in to Kinforth Cloud
             </p>
             <p className="mt-4 text-sm leading-7 text-[#40524a]">
               Keep your family&apos;s account private and easy to access.
@@ -36,3 +36,4 @@ export default async function AuthLayout({
     </main>
   );
 }
+

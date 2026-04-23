@@ -55,7 +55,7 @@ export default function SignUpPage() {
   return (
     <AuthFormShell
       title="Create account"
-      description="Create a Family Cloud account."
+      description="Create a Kinforth Cloud account."
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="space-y-1.5">
@@ -135,3 +135,4 @@ export default function SignUpPage() {
     </AuthFormShell>
   );
 }
+

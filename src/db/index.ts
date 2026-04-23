@@ -4,7 +4,7 @@ import * as schema from "./schema";
 
 const connectionString =
   process.env.DATABASE_URL ??
-  "postgresql://postgres:postgres@localhost:5432/family_cloud";
+  "postgresql://postgres:postgres@localhost:5432/kinforth_cloud";
 
 const globalForDb = globalThis as unknown as {
   pool?: Pool;
@@ -23,3 +23,4 @@ if (process.env.NODE_ENV !== "production") {
 export const db = drizzle(pool, { schema });
 
 export { schema };
+

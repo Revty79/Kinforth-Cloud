@@ -15,8 +15,8 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: "Family Cloud",
-    template: "%s | Family Cloud",
+    default: "Kinforth Cloud",
+    template: "%s | Kinforth Cloud",
   },
   description:
     "Private home cloud infrastructure for families to stay organized, secure, and connected.",
@@ -63,3 +63,4 @@ export default function RootLayout({
     </html>
   );
 }
+

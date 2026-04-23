@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Family Cloud",
-    short_name: "Family Cloud",
+    name: "Kinforth Cloud",
+    short_name: "Kinforth Cloud",
     description:
       "Private home cloud infrastructure for families to stay organized, secure, and connected.",
     start_url: "/dashboard",
@@ -36,3 +36,4 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
   };
 }
+

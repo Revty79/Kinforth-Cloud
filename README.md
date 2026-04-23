@@ -1,6 +1,6 @@
-# Family Cloud
+# Kinforth Cloud
 
-Phase 1 foundation for Family Cloud:
+Phase 1 foundation for Kinforth Cloud:
 
 - Public landing page (`/`)
 - Authentication flows:
@@ -34,7 +34,7 @@ cp .env.example .env.local
 
 3. Set `DATABASE_URL` to your PostgreSQL instance and set a long `BETTER_AUTH_SECRET`.
 
-4. Set `BETTER_AUTH_URL` to the canonical URL users should access (for example `https://family.example.com`).
+4. Set `BETTER_AUTH_URL` to the canonical URL users should access (for example `https://kinforth.example.com`).
 If omitted in production, Better Auth can resolve the URL from incoming requests.
 If you also access the app through other hosts (like LAN IP or router-forwarded address), add them to `BETTER_AUTH_TRUSTED_ORIGINS` as a comma-separated list.
 
@@ -75,10 +75,10 @@ Open http://localhost:3000
 
 ## Upload Storage
 
-- File uploads use `FAMILY_CLOUD_STORAGE_DIR` for on-disk storage.
+- File uploads use `KINFORTH_CLOUD_STORAGE_DIR` for on-disk storage.
 - Default location is `./storage` under the app working directory.
 - Docker runtime sets this to `/app/storage`.
-- For custom deployments, set `FAMILY_CLOUD_STORAGE_DIR` to a writable path.
+- For custom deployments, set `KINFORTH_CLOUD_STORAGE_DIR` to a writable path.
 
 ## Roles and Admin
 
@@ -86,3 +86,5 @@ Open http://localhost:3000
 - The first account that gets a profile is automatically bootstrapped as `admin`.
 - Admin panel is available at `/admin` and only shown to `admin` on the dashboard.
 - Admins can assign user roles and private storage limits.
+
+

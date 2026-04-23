@@ -7,7 +7,7 @@ type SendPasswordResetParams = {
 };
 
 const fromAddress =
-  process.env.MAIL_FROM ?? "Family Cloud <no-reply@family-cloud.local>";
+  process.env.MAIL_FROM ?? "Kinforth Cloud <no-reply@kinforth-cloud.local>";
 
 function hasSmtpConfig() {
   return Boolean(
@@ -36,7 +36,7 @@ export async function sendPasswordResetEmail({
   name,
 }: SendPasswordResetParams) {
   if (!hasSmtpConfig()) {
-    console.info(`[Family Cloud Auth] Password reset link for ${to}: ${url}`);
+    console.info(`[Kinforth Cloud Auth] Password reset link for ${to}: ${url}`);
     return;
   }
 
@@ -46,8 +46,9 @@ export async function sendPasswordResetEmail({
   await transporter.sendMail({
     from: fromAddress,
     to,
-    subject: "Reset your Family Cloud password",
+    subject: "Reset your Kinforth Cloud password",
     text: `Hi ${displayName},\n\nReset your password by opening this link:\n${url}\n\nIf you did not request this, you can ignore this email.`,
     html: `<p>Hi ${displayName},</p><p>Reset your password by opening this link:</p><p><a href="${url}">${url}</a></p><p>If you did not request this, you can ignore this email.</p>`,
   });
 }
+

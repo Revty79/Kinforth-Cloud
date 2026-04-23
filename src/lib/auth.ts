@@ -11,7 +11,7 @@ const baseUrl =
   (process.env.NODE_ENV === "production" ? undefined : "http://localhost:3000");
 const authSecret =
   process.env.BETTER_AUTH_SECRET ??
-  "family-cloud-dev-secret-change-in-production";
+  "kinforth-cloud-dev-secret-change-in-production";
 
 function parseTrustedOrigins(value: string | undefined) {
   if (!value) {
@@ -79,7 +79,7 @@ const staticTrustedOrigins = Array.from(
 );
 
 export const auth = betterAuth({
-  appName: "Family Cloud",
+  appName: "Kinforth Cloud",
   ...(baseUrl ? { baseURL: baseUrl } : {}),
   secret: authSecret,
   trustedOrigins: async (request) =>
@@ -101,9 +101,10 @@ export const auth = betterAuth({
     },
     onPasswordReset: async ({ user }) => {
       console.info(
-        `[Family Cloud Auth] Password reset completed for ${user.email}.`,
+        `[Kinforth Cloud Auth] Password reset completed for ${user.email}.`,
       );
     },
   },
   plugins: [nextCookies()],
 });
+
