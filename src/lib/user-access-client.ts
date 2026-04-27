@@ -11,6 +11,7 @@ export type FamilyUserAccessProfileItem = {
 export type AdminUserAccessItem = {
   userId: string;
   name: string;
+  username: string;
   email: string;
   role: FamilyRole;
   privateStorageLimitBytes: number;
@@ -32,6 +33,10 @@ export function getFamilyRoleLabel(role: FamilyRole) {
   };
 
   return labels[role];
+}
+
+export function canManageFamilyAccess(role: FamilyRole) {
+  return role === "admin" || role === "family_leader";
 }
 
 export function formatBytesToGiB(bytes: number) {

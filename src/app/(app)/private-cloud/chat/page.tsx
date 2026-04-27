@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PrivateCloudChatCenter } from "@/components/dashboard/private-cloud-chat-center";
 import { db } from "@/db";
 import { privateCloudChatMessage, user } from "@/db/schema";
+import { getUserContactLabel } from "@/lib/auth-identifiers";
 import type {
   PrivateCloudChatMessageItem,
   PrivateCloudChatParticipant,
@@ -16,6 +17,7 @@ export default async function PrivateCloudChatPage() {
     .select({
       id: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
     })
     .from(user)
@@ -26,7 +28,10 @@ export default async function PrivateCloudChatPage() {
     (participant) => ({
       id: participant.id,
       name: participant.name,
-      email: participant.email,
+      email: getUserContactLabel({
+        email: participant.email,
+        username: participant.username,
+      }),
     }),
   );
 

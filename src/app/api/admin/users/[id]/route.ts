@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { familyUserAccessProfile, user } from "@/db/schema";
+import { getUserContactLabel, normalizeAuthUsername } from "@/lib/auth-identifiers";
 import { getSession } from "@/lib/auth-session";
 import {
   countAdmins,
@@ -10,6 +11,7 @@ import {
   isFamilyRole,
 } from "@/lib/user-access";
 import {
+  canManageFamilyAccess,
   maxPrivateStorageLimitBytes,
   minPrivateStorageLimitBytes,
 } from "@/lib/user-access-client";
@@ -47,7 +49,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 
   const actorRole = await getUserRole(session.user.id);
-  if (actorRole !== "admin") {
+  if (!canManageFamilyAccess(actorRole)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -83,6 +85,16 @@ export async function PATCH(request: Request, context: RouteContext) {
     (typeof payload.role !== "string" || !isFamilyRole(payload.role))
   ) {
     return NextResponse.json({ error: "Role is invalid." }, { status: 400 });
+  }
+
+  if (
+    actorRole !== "admin" &&
+    (currentProfile.role === "admin" || nextRole === "admin")
+  ) {
+    return NextResponse.json(
+      { error: "Only admins can modify admin accounts." },
+      { status: 403 },
+    );
   }
 
   const nextStorageLimitBytes =
@@ -131,6 +143,7 @@ export async function PATCH(request: Request, context: RouteContext) {
     .select({
       userId: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
       role: familyUserAccessProfile.role,
       privateStorageLimitBytes: familyUserAccessProfile.privateStorageLimitBytes,
@@ -156,7 +169,11 @@ export async function PATCH(request: Request, context: RouteContext) {
     user: {
       userId: updated.userId,
       name: updated.name,
-      email: updated.email,
+      username: normalizeAuthUsername(updated.username ?? ""),
+      email: getUserContactLabel({
+        email: updated.email,
+        username: updated.username,
+      }),
       role: updated.role,
       privateStorageLimitBytes: Number(updated.privateStorageLimitBytes),
     },

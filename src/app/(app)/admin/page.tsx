@@ -2,12 +2,13 @@ import Link from "next/link";
 import { AdminControlCenter } from "@/components/dashboard/admin-control-center";
 import { requireSession } from "@/lib/auth-session";
 import { getUserRole, listAdminUserAccessItems } from "@/lib/user-access";
+import { canManageFamilyAccess } from "@/lib/user-access-client";
 
 export default async function AdminPage() {
   const session = await requireSession("/login?next=/admin");
   const role = await getUserRole(session.user.id);
 
-  if (role !== "admin") {
+  if (!canManageFamilyAccess(role)) {
     return (
       <section className="space-y-4">
         <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.1em] text-[#4e5f56]">
@@ -23,10 +24,10 @@ export default async function AdminPage() {
 
         <article className="fc-card rounded-xl border border-[#d6c8b2] p-5 sm:p-6">
           <h1 className="font-display text-3xl tracking-tight text-[#23362f]">
-            Admin only
+            Access restricted
           </h1>
           <p className="mt-2 text-sm leading-7 fc-text-muted">
-            This page is only available to accounts with the admin role.
+            This page is only available to family managers.
           </p>
         </article>
       </section>
@@ -48,7 +49,11 @@ export default async function AdminPage() {
         <span>Admin panel</span>
       </div>
 
-      <AdminControlCenter initialUsers={users} currentUserId={session.user.id} />
+      <AdminControlCenter
+        initialUsers={users}
+        currentUserId={session.user.id}
+        currentUserRole={role}
+      />
     </section>
   );
 }

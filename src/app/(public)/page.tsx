@@ -7,7 +7,7 @@ const items = [
   {
     icon: ShieldCheck,
     title: "Secure accounts",
-    text: "Email + password authentication with persistent sessions.",
+    text: "Email or username + password authentication with persistent sessions.",
   },
   {
     icon: KeyRound,

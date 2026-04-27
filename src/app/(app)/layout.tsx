@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { SiteLogo } from "@/components/ui/site-logo";
+import { getUserContactLabel } from "@/lib/auth-identifiers";
 import { requireSession } from "@/lib/auth-session";
 
 export default async function AppLayout({
@@ -23,7 +24,9 @@ export default async function AppLayout({
               <p className="text-sm font-semibold text-[#2d3e37]">
                 {session.user.name || "Family member"}
               </p>
-              <p className="text-xs fc-text-muted">{session.user.email}</p>
+              <p className="text-xs fc-text-muted">
+                {getUserContactLabel(session.user)}
+              </p>
             </div>
             <SignOutButton />
           </div>

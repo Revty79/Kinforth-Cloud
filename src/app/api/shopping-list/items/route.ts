@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { familyShoppingItem } from "@/db/schema";
+import { getUserDisplayName } from "@/lib/auth-identifiers";
 import { getSession } from "@/lib/auth-session";
 import {
   isValidShoppingItemLabel,
@@ -66,10 +67,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const createdByName =
-    normalizeShoppingItemLabel(session.user.name ?? "") ||
-    session.user.email ||
-    "Family member";
+  const createdByName = normalizeShoppingItemLabel(
+    getUserDisplayName(session.user, "Family member"),
+  );
 
   const [created] = await db
     .insert(familyShoppingItem)

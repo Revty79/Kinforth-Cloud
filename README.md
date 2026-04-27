@@ -4,8 +4,8 @@ Phase 1 foundation for Kinforth Cloud:
 
 - Public landing page (`/`)
 - Authentication flows:
-  - Log in (`/login`)
-  - Sign up (`/signup`)
+  - Log in with email or username (`/login`)
+  - Sign up with required username and optional email (`/signup`)
   - Forgot password (`/forgot-password`)
   - Reset password (`/reset-password?token=...`)
 - Protected authenticated shell (`/dashboard`)
@@ -84,7 +84,8 @@ Open http://localhost:3000
 
 - Supported roles: `admin`, `family_leader`, `family_member`.
 - The first account that gets a profile is automatically bootstrapped as `admin`.
-- Admin panel is available at `/admin` and only shown to `admin` on the dashboard.
-- Admins can assign user roles and private storage limits.
+- Admin panel is available at `/admin` and shown to manager roles on the dashboard.
+- Admins and family leaders can manage family accounts.
+- Managers can create family accounts with optional email, assign roles, and set private storage limits.
 
 

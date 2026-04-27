@@ -8,12 +8,20 @@ import { AuthFormShell } from "@/components/auth/auth-form-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getAuthErrorMessage } from "@/lib/auth-errors";
+import {
+  buildAuthEmailForAccount,
+  isLikelyEmailIdentifier,
+  isValidAuthUsername,
+  normalizeAuthUsername,
+  normalizeOptionalAuthEmail,
+} from "@/lib/auth-identifiers";
 import { authClient } from "@/lib/auth-client";
 
 export default function SignUpPage() {
   const router = useRouter();
 
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,16 +32,48 @@ export default function SignUpPage() {
     event.preventDefault();
     setError(null);
 
+    const normalizedName = name.trim();
+    if (!normalizedName) {
+      setError("Name is required.");
+      return;
+    }
+
+    const normalizedUsername = normalizeAuthUsername(username);
+    if (!isValidAuthUsername(normalizedUsername)) {
+      setError(
+        "Username must be 3-30 characters and use letters, numbers, periods, or underscores.",
+      );
+      return;
+    }
+
+    const normalizedEmail = normalizeOptionalAuthEmail(email);
+    if (normalizedEmail && !isLikelyEmailIdentifier(normalizedEmail)) {
+      setError("Email format looks invalid.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
+      return;
+    }
+
+    let accountEmail: string;
+    try {
+      accountEmail = buildAuthEmailForAccount({
+        username: normalizedUsername,
+        email: normalizedEmail,
+      });
+    } catch (buildError) {
+      setError(getAuthErrorMessage(buildError, "Invalid account details."));
       return;
     }
 
     setIsPending(true);
 
     const result = await authClient.signUp.email({
-      name,
-      email,
+      name: normalizedName,
+      username: normalizedUsername,
+      email: accountEmail,
       password,
     });
 
@@ -72,13 +112,28 @@ export default function SignUpPage() {
           />
         </div>
         <div className="space-y-1.5">
+          <label
+            htmlFor="username"
+            className="text-sm font-semibold text-[#2f3d37]"
+          >
+            Username
+          </label>
+          <Input
+            id="username"
+            required
+            autoComplete="username"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            placeholder="jordan_lee"
+          />
+        </div>
+        <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-semibold text-[#2f3d37]">
-            Email
+            Email (optional)
           </label>
           <Input
             id="email"
             type="email"
-            required
             autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}

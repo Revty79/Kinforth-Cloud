@@ -2,6 +2,7 @@ import { and, asc, eq, or } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { privateCloudChatMessage, user } from "@/db/schema";
+import { getUserDisplayName } from "@/lib/auth-identifiers";
 import { getSession } from "@/lib/auth-session";
 import {
   isValidPrivateChatMessage,
@@ -136,10 +137,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const sentByName =
-    normalizeSingleLineText(session.user.name ?? "") ||
-    session.user.email ||
-    "Private user";
+  const sentByName = normalizeSingleLineText(
+    getUserDisplayName(session.user, "Private user"),
+  );
 
   const [created] = await db
     .insert(privateCloudChatMessage)

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { requireSession } from "@/lib/auth-session";
-import { getFamilyRoleLabel } from "@/lib/user-access-client";
+import { canManageFamilyAccess, getFamilyRoleLabel } from "@/lib/user-access-client";
 import { getUserRole } from "@/lib/user-access";
 export default async function DashboardPage() {
   const session = await requireSession("/login?next=/dashboard");
@@ -55,12 +55,12 @@ export default async function DashboardPage() {
       href: "/private-cloud",
       cta: "Open private cloud",
     },
-    ...(role === "admin"
+    ...(canManageFamilyAccess(role)
       ? [
           {
             title: "Admin panel",
             detail:
-              "Assign roles and private storage limits for each family account.",
+              "Create family accounts and manage roles plus private storage limits.",
             icon: ShieldCheck,
             href: "/admin",
             cta: "Open admin panel",

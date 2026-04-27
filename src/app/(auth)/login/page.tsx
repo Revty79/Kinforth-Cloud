@@ -8,6 +8,11 @@ import { AuthFormShell } from "@/components/auth/auth-form-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getAuthErrorMessage } from "@/lib/auth-errors";
+import {
+  isLikelyEmailIdentifier,
+  normalizeAuthUsername,
+  normalizeOptionalAuthEmail,
+} from "@/lib/auth-identifiers";
 import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
@@ -22,7 +27,7 @@ export default function LoginPage() {
     return "/dashboard";
   }, [searchParams]);
 
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,11 +38,24 @@ export default function LoginPage() {
     setError(null);
     setIsPending(true);
 
-    const result = await authClient.signIn.email({
-      email,
-      password,
-      rememberMe,
-    });
+    const trimmedIdentifier = identifier.trim();
+    if (!trimmedIdentifier) {
+      setError("Email or username is required.");
+      setIsPending(false);
+      return;
+    }
+
+    const result = isLikelyEmailIdentifier(trimmedIdentifier)
+      ? await authClient.signIn.email({
+          email: normalizeOptionalAuthEmail(trimmedIdentifier) ?? trimmedIdentifier,
+          password,
+          rememberMe,
+        })
+      : await authClient.signIn.username({
+          username: normalizeAuthUsername(trimmedIdentifier),
+          password,
+          rememberMe,
+        });
 
     if (result.error) {
       setError(
@@ -61,17 +79,20 @@ export default function LoginPage() {
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="space-y-1.5">
-          <label htmlFor="email" className="text-sm font-semibold text-[#2f3d37]">
-            Email
+          <label
+            htmlFor="identifier"
+            className="text-sm font-semibold text-[#2f3d37]"
+          >
+            Email or username
           </label>
           <Input
-            id="email"
-            type="email"
-            autoComplete="email"
+            id="identifier"
+            type="text"
+            autoComplete="username"
             required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="you@family.com"
+            value={identifier}
+            onChange={(event) => setIdentifier(event.target.value)}
+            placeholder="you@family.com or jordan_lee"
           />
         </div>
         <div className="space-y-1.5">

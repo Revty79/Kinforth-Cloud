@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { familyChatMessage } from "@/db/schema";
+import { getUserDisplayName } from "@/lib/auth-identifiers";
 import { getSession } from "@/lib/auth-session";
 import {
   isValidChatMessage,
@@ -50,10 +51,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const sentByName =
-    normalizeSingleLineText(session.user.name ?? "") ||
-    session.user.email ||
-    "Family member";
+  const sentByName = normalizeSingleLineText(
+    getUserDisplayName(session.user, "Family member"),
+  );
 
   const [created] = await db
     .insert(familyChatMessage)

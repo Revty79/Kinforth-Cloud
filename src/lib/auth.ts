@@ -1,9 +1,15 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
+import { username } from "better-auth/plugins";
 import { db } from "../db";
 import * as schema from "../db/schema";
 import { sendPasswordResetEmail } from "./email";
+import {
+  isInternalAuthEmail,
+  maxAuthUsernameLength,
+  minAuthUsernameLength,
+} from "./auth-identifiers";
 
 const configuredBaseUrl = process.env.BETTER_AUTH_URL?.trim() || undefined;
 const baseUrl =
@@ -93,6 +99,13 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
+      if (isInternalAuthEmail(user.email)) {
+        console.info(
+          `[Kinforth Cloud Auth] Skipping reset email for ${user.id}; no external email on account.`,
+        );
+        return;
+      }
+
       await sendPasswordResetEmail({
         to: user.email,
         url,
@@ -105,6 +118,12 @@ export const auth = betterAuth({
       );
     },
   },
-  plugins: [nextCookies()],
+  plugins: [
+    username({
+      minUsernameLength: minAuthUsernameLength,
+      maxUsernameLength: maxAuthUsernameLength,
+    }),
+    nextCookies(),
+  ],
 });
 

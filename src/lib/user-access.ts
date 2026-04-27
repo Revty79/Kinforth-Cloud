@@ -8,6 +8,7 @@ import {
   type FamilyRole,
   type FamilyUserAccessProfileItem,
 } from "./user-access-client";
+import { getUserContactLabel, normalizeAuthUsername } from "./auth-identifiers";
 
 function parseNumericValue(value: unknown) {
   if (typeof value === "number" && Number.isFinite(value)) {
@@ -132,6 +133,7 @@ export async function listAdminUserAccessItems(): Promise<AdminUserAccessItem[]>
     .select({
       userId: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
     })
     .from(user)
@@ -145,6 +147,7 @@ export async function listAdminUserAccessItems(): Promise<AdminUserAccessItem[]>
     .select({
       userId: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
       role: familyUserAccessProfile.role,
       privateStorageLimitBytes: familyUserAccessProfile.privateStorageLimitBytes,
@@ -159,7 +162,11 @@ export async function listAdminUserAccessItems(): Promise<AdminUserAccessItem[]>
   return rows.map((row) => ({
     userId: row.userId,
     name: row.name,
-    email: row.email,
+    username: normalizeAuthUsername(row.username ?? ""),
+    email: getUserContactLabel({
+      email: row.email,
+      username: row.username,
+    }),
     role: normalizeRole(row.role),
     privateStorageLimitBytes:
       parseNumericValue(row.privateStorageLimitBytes) ||
